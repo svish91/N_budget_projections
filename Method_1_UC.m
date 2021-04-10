@@ -91,7 +91,6 @@ prompt = 'Do you (A) 500 kgN or (B) upper bound as 95th percentile? ';
 ubOpt = input(prompt,'s');
 
 for idx_cr = 1:11
-    %eval(['load(''C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\September 2018 Work\Scenario Development\Case 5 Global Projection Scenario\AllCountries_' char(cate_name(idx_cr)) '\Co' char(cate_name(idx_cr)) '_availData.mat'')'])
     
     for idx_co = 1:length(co_tmp)
         if isnan(Proj_Nyield_kghacateCoCr2050(idx_cr,idx_co)) || Proj_Nyield_kghacateCoCr2050(idx_cr,idx_co)==0
@@ -103,7 +102,6 @@ for idx_cr = 1:11
             ID_noProj(idx_cr,idx_co,:)= 1;
         else    
     
-    %eval(['load(''C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\September 2018 Work\Scenario Development\Case 5 Global Projection Scenario\AllCountries_' char(cate_name(idx_cr)) '\Co' char(FAOSTAT_CoName_FAO(idx_co)) '_' char(cate_name(idx_cr)) '.mat'')'])
         % low NUE
         ProjNIn2050(idx_cr,idx_co,1)= Proj_Nyield_kghacateCoCr2050(idx_cr,idx_co)/confInt(idx_cr,idx_co,1);
         % real data
