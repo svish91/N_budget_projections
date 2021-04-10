@@ -3,11 +3,10 @@
 %this program is estimating the projected N input and NUE for 2030 and 2050
 %year 2006 as the baseline
 clear;clc;
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\iFarmData.mat','FAOSTAT_CrName_FAO')
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData');
+load('Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
+load('iFarmData.mat','FAOSTAT_CrName_FAO')
 load('NC_Bou1.mat')
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\CropCate_AreaH_115Co_Apr2020_AllCrops.mat')
+load('CropCate_AreaH_115Co_Apr2020_AllCrops.mat')
 
 %%load data
 load('Main_NInputYield2016_115Co_Apr2020_AllCrops.mat');
@@ -34,7 +33,6 @@ NUE_allCoCate(:,idx,50:end) = NaN;
 cate_name={'Wheat','Rice','Maize','Other Coarse Grain','Soybean','Oil Palm',...
     'Other Oil Seeds','Cotton','Sugar Crops','Fruits and Vegetable','Other Crops'};
 
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\AGU poster project\Updating Methods 20190524\Hyperbolic Test\Uncertainty quantification\NewCoSet_115Co_Apr2020_AllCrops')
 %%
 clc;
 co_tmp = FAOSTAT_CoName_115;
@@ -93,7 +91,6 @@ prompt = 'Do you (A) 500 kgN or (B) upper bound as 95th percentile? ';
 ubOpt = input(prompt,'s');
 
 for idx_cr = 1:11
-    %eval(['load(''C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\September 2018 Work\Scenario Development\Case 5 Global Projection Scenario\AllCountries_' char(cate_name(idx_cr)) '\Co' char(cate_name(idx_cr)) '_availData.mat'')'])
     
     for idx_co = 1:length(co_tmp)
         if isnan(Proj_Nyield_kghacateCoCr2050(idx_cr,idx_co)) || Proj_Nyield_kghacateCoCr2050(idx_cr,idx_co)==0
@@ -105,7 +102,6 @@ for idx_cr = 1:11
             ID_noProj(idx_cr,idx_co,:)= 1;
         else    
     
-    %eval(['load(''C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\September 2018 Work\Scenario Development\Case 5 Global Projection Scenario\AllCountries_' char(cate_name(idx_cr)) '\Co' char(FAOSTAT_CoName_FAO(idx_co)) '_' char(cate_name(idx_cr)) '.mat'')'])
         % low NUE
         ProjNIn2050(idx_cr,idx_co,1)= Proj_Nyield_kghacateCoCr2050(idx_cr,idx_co)/confInt(idx_cr,idx_co,1);
         % real data
@@ -190,39 +186,3 @@ if ubOpt == 'A'
 else
     eval(['save(''Results_Method1_' num2str(length(yrs)) 'yr_95thPub_Apr2020_115Co_UC.mat'')']);
 end
-
-%% 113 countries
-%{
-clear;
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Tan_Mar2020\114CountryGroup.mat')
-load('Results_Method1_5yr_95thPub_Feb2020_UC.mat','ProjNIn2050','Proj_Area_hacateCoCr2050',...
-    'Proj_Nyield_kghacateCoCr2050')
-idx_co = Co_ID_group_X(1:113);
-% Aggregating by country's harvested area 
-Tot_ProjNIn2050Tg = round(nansum(ProjNIn2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co)),2)./10^9;
-Tot_NYield2050Tg  = round(nansum(Proj_Nyield_kghacateCoCr2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co),2))./10^9;
-Tot_NUE2050  = Tot_NYield2050Tg./Tot_ProjNIn2050Tg ;
-Tot_NSur2050Tg  = Tot_ProjNIn2050Tg - Tot_NYield2050Tg;
-avgNUE2050 = mean(Tot_NUE2050);
-
-% cr type
-Totcr_ProjNIn2050Tg = round(nansum(ProjNIn2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co),2),2)./10^9;
-Totcr_NYield2050Tg  = round(nansum(Proj_Nyield_kghacateCoCr2050(:,idx_co).*Proj_Area_hacateCoCr2050(:,idx_co),2))./10^9;
-Totcr_NUE2050  = Totcr_NYield2050Tg./Totcr_ProjNIn2050Tg ;
-Totcr_NSur2050Tg  = Totcr_ProjNIn2050Tg - Totcr_NYield2050Tg;
-
-
-%Final_estimate = table(cate_name',Tot_NYield2050Tg,Tot_ProjNIn2050Tg,Tot_NSur2050Tg,Tot_NUE2050);
-% Overall sum
- % aggregate by crop type
-
-totNin_co_kgNha = nansum(ProjNIn2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co),1)./nansum(Proj_Area_hacateCoCr2050(:,idx_co),1);
-totNY_co_kgNha = nansum(Proj_Nyield_kghacateCoCr2050(:,idx_co).*Proj_Area_hacateCoCr2050(:,idx_co),1)./nansum(Proj_Area_hacateCoCr2050(:,idx_co),1);
-totNin_co_kgNha(125) = NaN;
-
-totNsur_co_kgNha = totNin_co_kgNha - totNY_co_kgNha;%kg/ha
-overall_totalNin_Tg = nansum(totNin_co_kgNha.*nansum(Proj_Area_hacateCoCr2050(:,idx_co)))./10^9;%Tg
-overall_totalNsur_Tg = nansum(totNsur_co_kgNha.*nansum(Proj_Area_hacateCoCr2050(:,idx_co)))./10^9;%Tg
-overall_totalNy_Tg = nansum(totNY_co_kgNha.*nansum(Proj_Area_hacateCoCr2050(:,idx_co,:)))./10^9;%Tg
-save('Results_Method1_5yr_95thPub_113Feb2020_UC.mat')
-%}
