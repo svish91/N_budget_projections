@@ -1,15 +1,12 @@
 clear ;
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData');
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\NC_Bou1.mat')
+cd('NitrogenBudgetData');
+load('NC_Bou1.mat')
 %%load data
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\crIDGroups.mat');
+load('crIDGroups.mat');
 cr=Cr_IDG;
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Main_NInputYield2016_Apr2020_115Co_AllCrops.mat');
+load('InputYield2016_Apr2020_115Co_AllCrops.mat');
 cate_name={'Wheat','Rice','Maize','Other Coarse Grain','Soybean','Oil Palm',...
     'Other Oil Seeds','Cotton','Sugar Crops','Fruits and Vegetable','Other Crops'};
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\AGU poster project\December 2018 Work\Bootstrap_AllCrops');
-
-
 
 %% Calculating NUE and Nsurplus
 FAOSTAT_CoName_FAO(51) = {'Cote dIvoire'};
@@ -135,4 +132,3 @@ end
 disp([idx_cr,idx_co])
 end
 
-save('Ymax_all_modified_bootstrap_Apr2020_AllCrops.mat','Ymax','confInt','YRF_Ymax','confInt_10yr');
