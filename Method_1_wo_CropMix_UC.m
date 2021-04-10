@@ -3,7 +3,7 @@
 %this program is estimating the projected N input and NUE for 2030 and 2050
 %year 2006 as the baseline
 clear;clc;
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
+load('Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
 load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\iFarmData.mat','FAOSTAT_CrName_FAO')
 cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData');
 load('NC_Bou1.mat')
