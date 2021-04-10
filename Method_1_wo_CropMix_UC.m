@@ -4,8 +4,7 @@
 %year 2006 as the baseline
 clear;clc;
 load('Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\iFarmData.mat','FAOSTAT_CrName_FAO')
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData');
+load('iFarmData.mat','FAOSTAT_CrName_FAO')
 load('NC_Bou1.mat')
 load('Nbudget_01-Nov-2019.mat','Nyld_kgkm_agg','Ninput_kgkm_agg','Nsur_kgkm_agg','Ninput_kgkm','Nyield_kgkm','AreaH_FAO')
 Nyld_kgha_agg = Nyld_kgkm_agg./100;% km2 to ha
@@ -13,7 +12,7 @@ Ninput_kgha_agg = Ninput_kgkm_agg./100;
 Nsur_kgha_agg = Nsur_kgkm_agg./100;
 %%load data
 load('Main_NInputYield2016_115Co_Apr2020_AllCrops.mat');
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\CropCate_AreaH_115Co_Apr2020_AllCrops.mat')
+load('CropCate_AreaH_115Co_Apr2020_AllCrops.mat')
 
 FAOSTAT_CoName_FAO(51) = {'Cote Divoire'};
 FAOSTAT_CoName_FAO(160) = {'Reunion'};
@@ -31,12 +30,11 @@ crInkgha(:,idx,50:end) = NaN;
 Nsur_allCoCate(:,idx,50:end) = NaN;
 NUE_allCoCate(:,idx,50:end) = NaN;
 %load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Fert_Cr_Price_SAMData.mat')
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\CrIDGroups.mat','Cr_IDG')
+load('CrIDGroups.mat','Cr_IDG')
 
 cate_name={'Wheat','Rice','Maize','Other Coarse Grain','Soybean','Oil Palm',...
     'Other Oil Seeds','Cotton','Sugar Crops','Fruits and Vegetable','Other Crops'};
 
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\AGU poster project\Updating Methods 20190524\Hyperbolic Test\Uncertainty quantification\NewCoSet_115Co_Apr2020_AllCrops');
 %%
 clc;
 co_tmp = FAOSTAT_CoName_115;
@@ -78,15 +76,6 @@ end
 for j=1:length(co_tmp)
         confInt(j,:)=prctile(bootM(j,:),[5 95]);
 end
-%{
-%%load data
-yrs = 51:55; totyrs = length(yrs); org_yr= 51:55;
-avgNUE_cocr=nanmean(NUE_allCoCate(:,:,51:55),3); % estimating average NUE
-
-
-yrs = 51:55; totyrs = length(yrs); %org_yr= 51:55;
-avgNUE=nanmean(Nyld_kgha_agg(:,yrs)./Ninput_kgha_agg(:,yrs),2); % estimating average NUE
-%}
 % estimating 95th percentile of the N input
 NinTmp = nanmean(Ninput_kgha_agg(:,51:55),2);
 UpperLim_NIn = prctile(NinTmp,95);
