@@ -1,8 +1,8 @@
 clear;clc;
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Main_NInputYield2016_115Co_Apr2020_AllCrops.mat');
+load('Agg_ProjectionsCrCate2050_115Co_Apr2020_AllCrops.mat')
+load('Main_NInputYield2016_115Co_Apr2020_AllCrops.mat');
 
-Ymaxs_M3 = load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\AGU poster project\December 2018 Work\Ymax_all_modified_bootstrap_115Co_Apr2020_AllCrops.mat','confInt','Ymax');
+Ymaxs_M3 = load('Ymax_all_modified_bootstrap_115Co_Apr2020_AllCrops.mat','confInt','Ymax');
 Ymax = Ymaxs_M3.Ymax;
 %load('Ymax_all_modified_Nov2019.mat')
 Ymaxs_M2  = load('Results_Method2_10yr_95thPub_Apr2020_115Co_UC.mat','confInt','YRF_Ymax');
@@ -10,7 +10,6 @@ QNInM2 = load('Results_Method2_10yr_95thPub_Apr2020_115Co_UC.mat','ProjNIn2050',
 YRF_Ymax = Ymaxs_M2.YRF_Ymax;
 idxNa = find(YRF_Ymax ==1 );
 YRF_Ymax(idxNa) = NaN;
-cd('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetWork\AGU poster project\Updating Methods 20190524\Hyperbolic Test\Uncertainty quantification\NewCoSet_115Co_Apr2020_AllCrops');
 %%
 co_tmp = FAOSTAT_CoName_115;
 
@@ -18,7 +17,7 @@ co_tmp = FAOSTAT_CoName_115;
 UpperLim_NIn = QNInM2.UpperLim_NIn;
 % N Input 2050 based on the fair comparison with improvement in N input for
 % cases like Ymax<Yield
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Main_NInputYield2016_115Co_Apr2020_AllCrops.mat','NUE_allCoCate');
+load('Main_NInputYield2016_115Co_Apr2020_AllCrops.mat','NUE_allCoCate');
 avgNUE=nanmean(NUE_allCoCate(:,:,51:55),3);
 
 %%%%%%%%%%%%%%%%%%%%% Estimating peojected Ymax %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -159,38 +158,3 @@ else
     save('Results_Method3_95thPub_Apr2020_lqfit_negSlope_and_UshapedQuad_UC.mat')
 end
 
-%% 113 countries
-%{
-clear;
-load('C:\Users\svishwakarma\Documents\Research_Work\NitrogenBudgetData\Tan_Mar2020\114CountryGroup.mat')
-load('Results_Method3_95thPub_Feb2020_lqfit_negSlope_and_UshapedQuad_UC.mat','ProjNIn2050','Proj_Area_hacateCoCr2050',...
-    'Proj_Nyield_kghacateCoCr2050')
-idx_co = Co_ID_group_X(1:113);
-% Aggregating by country's harvested area 
-Tot_ProjNIn2050Tg = round(nansum(ProjNIn2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co)),2)./10^9;
-Tot_NYield2050Tg  = round(nansum(Proj_Nyield_kghacateCoCr2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co),2))./10^9;
-Tot_NUE2050  = Tot_NYield2050Tg./Tot_ProjNIn2050Tg ;
-Tot_NSur2050Tg  = Tot_ProjNIn2050Tg - Tot_NYield2050Tg;
-avgNUE2050 = mean(Tot_NUE2050);
-
-% cr type
-Totcr_ProjNIn2050Tg = round(nansum(ProjNIn2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co),2),2)./10^9;
-Totcr_NYield2050Tg  = round(nansum(Proj_Nyield_kghacateCoCr2050(:,idx_co).*Proj_Area_hacateCoCr2050(:,idx_co),2))./10^9;
-Totcr_NUE2050  = Totcr_NYield2050Tg./Totcr_ProjNIn2050Tg ;
-Totcr_NSur2050Tg  = Totcr_ProjNIn2050Tg - Totcr_NYield2050Tg;
-
-
-%Final_estimate = table(cate_name',Tot_NYield2050Tg,Tot_ProjNIn2050Tg,Tot_NSur2050Tg,Tot_NUE2050);
-% Overall sum
- % aggregate by crop type
-
-totNin_co_kgNha = nansum(ProjNIn2050(:,idx_co,:).*Proj_Area_hacateCoCr2050(:,idx_co),1)./nansum(Proj_Area_hacateCoCr2050(:,idx_co),1);
-totNY_co_kgNha = nansum(Proj_Nyield_kghacateCoCr2050(:,idx_co).*Proj_Area_hacateCoCr2050(:,idx_co),1)./nansum(Proj_Area_hacateCoCr2050(:,idx_co),1);
-totNin_co_kgNha(125) = NaN;
-
-totNsur_co_kgNha = totNin_co_kgNha - totNY_co_kgNha;%kg/ha
-overall_totalNin_Tg = nansum(totNin_co_kgNha.*nansum(Proj_Area_hacateCoCr2050(:,idx_co)))./10^9;%Tg
-overall_totalNsur_Tg = nansum(totNsur_co_kgNha.*nansum(Proj_Area_hacateCoCr2050(:,idx_co)))./10^9;%Tg
-overall_totalNy_Tg = nansum(totNY_co_kgNha.*nansum(Proj_Area_hacateCoCr2050(:,idx_co,:)))./10^9;%Tg
-save('Results_Method3_95thPub_113Feb2020_lqfit_negSlope_and_UshapedQuad_UC.mat')
-%}
