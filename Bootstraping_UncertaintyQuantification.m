@@ -1,5 +1,4 @@
 clear ;
-cd('NitrogenBudgetData');
 load('NC_Bou1.mat')
 %%load data
 load('crIDGroups.mat');
